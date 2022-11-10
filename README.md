@@ -241,7 +241,7 @@ The experiments can then be run using the `evaluate_estimator` script:
 evaluate_estimator -cn multi_fft_2
 ```
 
-Substitude `multi_fft_2` for any of the configuration names from the
+Substitute `multi_fft_2` for any of the configuration names from the
 `estimator_config` directory to run different experiments.
 
 #### On nbdev

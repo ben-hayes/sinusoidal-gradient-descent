@@ -392,7 +392,7 @@ def evaluation_loop(
 
 # %% ../../nbs/01_evaluate_estimator.ipynb 7
 @hydra.main(
-    version_base=None, config_path="../../estimator_config", config_name="default"
+    version_base=None, config_path="../../estimator_config", config_name="single"
 )
 def run(cfg: DictConfig) -> None:
     """Runs the estimator evaluation"""
