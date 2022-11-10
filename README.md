@@ -167,6 +167,13 @@ direct_osc_output = complex_oscillator_direct(z, N)
 torch.testing.assert_close(direct_osc_output, cosine_reference)
 ```
 
+Timing the operation on an Intel i5 2GHz Quad Core CPU:
+
+``` python
+```
+
+    15 µs ± 740 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+
 ### Implementation 2: cumulative product
 
 This implementation takes the cumulative product across a time series of
@@ -195,21 +202,30 @@ cumprod_osc_output = complex_oscillator_cumprod(z.repeat(N))
 torch.testing.assert_close(cumprod_osc_output, cosine_reference)
 ```
 
+Timing the operation on an Intel i5 2GHz Quad Core CPU:
+
+``` python
+z_repeat = z.repeat(N)
+```
+
+    18.3 µs ± 904 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+
 ### Implementation 3: directly damped sinusoid
 
-This implementation addresses the issues with numerical instability seen
-with direct exponentiation and cumulative multiplication by instead
-explicitly computing the parameters of the damped sinusoidal equivalent
-of the surrogate. This could further be adapted to time-varying $z$ by
-utilising a cumulative summation to compute the sinusoid’s phase and a
-cumulative product to compute instantaneous amplitude.
+This implementation limits the issues with numerical stability to only
+the amplitude parameter by instead explicitly computing the parameters
+of the damped sinusoidal equivalent of the surrogate. This could further
+be adapted to time-varying $z$ by utilising a cumulative summation to
+compute the sinusoid’s phase and a cumulative product to compute
+instantaneous amplitude. Adopting an angular cumsum operation to
+accumulate sinusoidal phase would further improve numerical precision.
 
 ``` python
 def complex_oscillator_damped(z: torch.complex, N: int):
     """Implements the complex surrogate by explicitly computing the parameters of the
     damped sinusoid equivalent."""
     n = torch.arange(N)
-    return z.abs() * torch.cos(z.angle() * n)
+    return (z.abs() ** n) * torch.cos(z.angle() * n)
 ```
 
 ``` python
@@ -217,6 +233,13 @@ damped_osc_output = complex_oscillator_damped(z, N)
 
 torch.testing.assert_close(damped_osc_output, cosine_reference)
 ```
+
+Timing the operation on an Intel i5 2GHz Quad Core CPU:
+
+``` python
+```
+
+    27.2 µs ± 346 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)
 
 ## Running this code
 
