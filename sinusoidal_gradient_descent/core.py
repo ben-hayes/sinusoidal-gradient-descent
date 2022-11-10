@@ -79,6 +79,7 @@ def fft_loss(
     log_huber: float = 0.0,
     reduce_freq: str = "mean",
     reduce_batch: str = "sum",
+    huber_delta: float = 0.1,
     eps: float = 1e-8,
 ):
     freq_reduce_fn = get_reduce_fn(reduce_freq)
@@ -96,7 +97,7 @@ def fft_loss(
         else 0.0
     )
     lin_huber = (
-        lin_huber * torch.nn.functional.huber_loss(pred_fft, target_fft)
+        lin_huber * torch.nn.functional.huber_loss(pred_fft, target_fft, delta=huber_delta)
         if lin_huber != 0.0
         else 0.0
     )
@@ -119,7 +120,7 @@ def fft_loss(
     log_huber = (
         log_huber
         * torch.nn.functional.huber_loss(
-            torch.log(pred_fft + eps), torch.log(target_fft + eps)
+            torch.log(pred_fft + eps), torch.log(target_fft + eps), delta=huber_delta
         )
         if log_huber != 0.0
         else 0.0

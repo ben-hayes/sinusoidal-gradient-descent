@@ -5,3 +5,4 @@ website:
       - 00_core.ipynb
       - 01_evaluate_estimator.ipynb
       - 02_metrics.ipynb
+      - 03_constrained_model.ipynb
