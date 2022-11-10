@@ -1,0 +1,13 @@
+_target_: sinusoidal_gradient_descent.eval.estimator.MultiSinusoidEvaluationDataset
+
+signal_length: 4096
+n_components: 4
+freq_range: [0.05, 0.45]
+amp_range: [0.1, 1.0]
+
+n_snrs: 1
+enable_noise: false
+
+n_samples: 2000
+
+initial_phase: 0.0

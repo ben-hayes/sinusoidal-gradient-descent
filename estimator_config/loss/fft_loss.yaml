@@ -1,0 +1,5 @@
+_target_: sinusoidal_gradient_descent.core.fft_loss
+lin_l1: 0.0
+lin_l2: 1.0
+log_l1: 0.0
+log_l2: 0.0

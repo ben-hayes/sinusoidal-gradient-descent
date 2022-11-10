@@ -1,0 +1,15 @@
+_target_: sinusoidal_gradient_descent.eval.estimator.SinusoidEvaluationDataset
+
+freq_range: [0.05, 0.45]
+amp_range: [1.0, 1.0]
+snr_range: [0.0, 40.0]
+
+n_freqs: 100
+n_amps: 1
+n_snrs: 20
+
+evaluate_phase: false
+signal_length: 4096
+
+# start at pi / 2 radians
+initial_phase: 0.0

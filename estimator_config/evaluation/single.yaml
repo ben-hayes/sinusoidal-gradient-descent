@@ -1,0 +1,5 @@
+_target_: sinusoidal_gradient_descent.eval.estimator.evaluation_loop
+use_global_amp: false
+normalise_complex_grads: false
+
+mode: single

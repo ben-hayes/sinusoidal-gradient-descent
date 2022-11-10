@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "sinusoidal-gradient-descent"
+  site-url: "https://ben-hayes.github.io/sinusoidal-gradient-descent"
+  description: ""
+  repo-branch: main
+  repo-url: "https://github.com/ben-hayes/sinusoidal-gradient-descent"

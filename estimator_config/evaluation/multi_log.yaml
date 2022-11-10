@@ -1,0 +1,6 @@
+_target_: sinusoidal_gradient_descent.eval.estimator.log_descent
+use_global_amp: true
+saturate_global_amp: true
+normalise_complex_grads: true
+
+mode: multi

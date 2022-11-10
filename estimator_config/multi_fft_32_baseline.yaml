@@ -1,0 +1,27 @@
+defaults:
+  - _self_
+  - metric_fn: multi_sinusoid
+  - dataset: multi_sinusoid
+  - optimizer: adam
+  - loss: fft_loss
+  - amplitude_estimator: fft
+  - evaluation: multi
+  - param_sampler: multi
+
+param_sampler:
+  n_sinusoids: 32
+  invert_sigmoid: false
+
+evaluation:
+  use_real_sinusoid_baseline: true
+
+dataset:
+  n_components: 32
+
+batch_size: 2048
+device: cuda
+n_steps: 250000
+log_interval: 1000
+output_file: results/multi.fft.32.baseline.csv
+
+seeds: [3456]

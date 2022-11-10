@@ -1,0 +1,17 @@
+defaults:
+  - _self_
+  - metric_fn: single_sinusoid
+  - dataset: single_sinusoid
+  - optimizer: adam
+  - loss: fft_loss
+  - amplitude_estimator: fft
+  - evaluation: single
+  - param_sampler: single
+
+batch_size: 16
+device: cpu
+n_steps: 50001
+log_interval: 1000
+output_file: results/single_sinusoid_no_phase.csv
+
+seeds: [11111, 22222, 33333, 44444, 55555, 66666, 77777, 88888, 99999, 12345]

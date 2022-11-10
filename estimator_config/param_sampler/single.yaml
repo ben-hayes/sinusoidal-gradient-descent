@@ -1,0 +1,7 @@
+_target_: sinusoidal_gradient_descent.eval.estimator.sample_initial_predictions
+
+n_sinusoids: 1
+freq_range: [0.0, 0.5]
+amp_range: [0.1, 1.0]
+initial_phase: 0.0
+flatten: true
