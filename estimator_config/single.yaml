@@ -1,5 +1,4 @@
 defaults:
-  - _self_
   - metric_fn: single_sinusoid
   - dataset: single_sinusoid
   - optimizer: adam
@@ -7,6 +6,7 @@ defaults:
   - amplitude_estimator: fft
   - evaluation: single
   - param_sampler: single
+  - _self_
 
 batch_size: 16
 device: cpu

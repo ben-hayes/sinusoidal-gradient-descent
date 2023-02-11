@@ -1,5 +1,4 @@
 defaults:
-  - _self_
   - metric_fn: multi_sinusoid
   - dataset: multi_sinusoid
   - optimizer: adam
@@ -7,6 +6,7 @@ defaults:
   - amplitude_estimator: fft
   - evaluation: multi
   - param_sampler: multi
+  - _self_
 
 param_sampler:
   n_sinusoids: 32
