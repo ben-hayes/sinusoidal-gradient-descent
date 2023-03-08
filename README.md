@@ -248,7 +248,7 @@ the package inside a virtual environment of your choice:
 
 ``` bash
 git clone https://github.com/ben-hayes/sinusoidal-gradient-descent.git
-cd sinusoidal gradient-descent
+cd sinusoidal-gradient-descent
 conda create --name sin-gd
 conda activate sin-gd
 pip install -e .
