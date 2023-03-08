@@ -289,6 +289,8 @@ def evaluation_loop(
         else:
             z = mag * torch.exp(1j * angle)
             z.detach_().requires_grad_(True)
+            if use_global_amp:
+                global_amp.requires_grad_(True)
             initial_phase = torch.exp(1j * phase)
             optimizer_params = [z] if not use_global_amp else [z, global_amp]
 
