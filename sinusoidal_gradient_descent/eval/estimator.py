@@ -20,7 +20,7 @@ from sinusoidal_gradient_descent.core import (
     fft_loss,
     real_oscillator
 )
-from .metrics import min_lap_cost
+from .metrics import min_lap_cost, spectral_mse
 
 # %% ../../nbs/01_evaluate_estimator.ipynb 3
 class SinusoidEvaluationDataset(torch.utils.data.Dataset):
@@ -249,7 +249,7 @@ def sample_initial_predictions(
 
     return freqs, amps, phases, global_amp
 
-# %% ../../nbs/01_evaluate_estimator.ipynb 6
+# %% ../../nbs/01_evaluate_estimator.ipynb 7
 def evaluation_loop(
     dataloader: torch.utils.data.DataLoader,
     loss_cfg: DictConfig,
@@ -295,6 +295,8 @@ def evaluation_loop(
             optimizer_params = [z] if not use_global_amp else [z, global_amp]
 
         optimizer = hydra.utils.instantiate(optimizer_cfg, optimizer_params)
+
+        descent_log = dict(spectral_mse=[], step=[])
 
         for step in range(n_steps):
             optimizer.zero_grad()
@@ -344,18 +346,24 @@ def evaluation_loop(
                     print(f"Step {step}: {loss.item()}")
                     if not use_real_sinusoid_baseline:
                         if mode == "multi":
-                            freq_error = np.mean(
-                                min_lap_cost(
-                                    z.angle().abs() / (2 * math.pi),
-                                    target_freq.abs(),
-                                    True,
-                                )
+                            error = compute_spectral_mse(
+                                use_real_sinusoid_baseline,
+                                use_global_amp,
+                                saturate_global_amp,
+                                angle if use_real_sinusoid_baseline else None,
+                                mag if use_real_sinusoid_baseline else None,
+                                phase,
+                                z if not use_real_sinusoid_baseline else None,
+                                global_amp if use_global_amp else None,
+                                target_signal,
                             )
+                            descent_log["step"].append(step)
+                            descent_log["spectral_mse"].append(error)
                         else:
-                            freq_error = torch.pow(
+                            error = torch.pow(
                                 z.angle().abs() / (2 * math.pi) - target_freq.abs(), 2
                             ).mean()
-                        print(f"Freq error: {freq_error.tolist()}")
+                        print(f"Freq error: {error.tolist()}")
 
         if use_real_sinusoid_baseline:
             pred_freq = angle
@@ -390,9 +398,10 @@ def evaluation_loop(
         metrics["seed"] = seed
 
         df = pd.DataFrame(metrics)
-    return df
+        descent_log_df = pd.DataFrame(descent_log)
+    return df, descent_log_df
 
-# %% ../../nbs/01_evaluate_estimator.ipynb 7
+# %% ../../nbs/01_evaluate_estimator.ipynb 8
 @hydra.main(
     version_base=None, config_path="../../estimator_config", config_name="single"
 )
@@ -410,6 +419,7 @@ def run(cfg: DictConfig) -> None:
     amp_estimate_representation = "fft" if "fft" in cfg.loss._target_ else "none"
 
     metric_df = pd.DataFrame()
+    descent_log_df = pd.DataFrame()
 
     for seed in cfg.seeds:
         initial_params = hydra.utils.call(
@@ -419,7 +429,7 @@ def run(cfg: DictConfig) -> None:
             seed=seed,
         )
 
-        df_addition = hydra.utils.call(
+        df_addition, descent_log_df_addition = hydra.utils.call(
             cfg.evaluation,
             dataloader,
             cfg.loss,
@@ -434,8 +444,13 @@ def run(cfg: DictConfig) -> None:
         )
 
         metric_df = pd.concat([metric_df, df_addition], axis=0)
+        descent_log_df = pd.concat([descent_log_df, descent_log_df_addition], axis=0)
 
         dir = os.path.split(cfg.output_file)[0]
         if not os.path.exists(dir):
             os.makedirs(dir)
         metric_df.to_csv(cfg.output_file, index=False)
+        metric_df.to_csv(
+            os.path.splitext(cfg.output_file)[0] + ".descent_log.csv", index=False
+        )
+

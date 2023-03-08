@@ -1,0 +1,24 @@
+defaults:
+  - metric_fn: multi_sinusoid
+  - dataset: multi_sinusoid
+  - optimizer: adam
+  - loss: mse_loss
+  - amplitude_estimator: mse
+  - evaluation: multi
+  - param_sampler: multi
+  - _self_
+
+param_sampler:
+  n_sinusoids: 2
+
+dataset:
+  n_components: 2
+  n_samples: 1
+
+batch_size: 1
+device: cuda
+n_steps: 250000
+log_interval: 100
+output_file: results/multi.mse.2.surrogate.descent.csv
+
+seeds: [1234]
