@@ -1,0 +1,1 @@
+Sitemap: https://ben-hayes.github.io/sinusoidal-gradient-descent/sitemap.xml

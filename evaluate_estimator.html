@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Runs experiments from the paper">
+
+<title>sinusoidal-gradient-descent - Estimator Evaluation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="sinusoidal-gradient-descent - Estimator Evaluation">
+<meta property="og:description" content="Runs experiments from the paper">
+<meta property="og:site-name" content="sinusoidal-gradient-descent">
+<meta name="twitter:title" content="sinusoidal-gradient-descent - Estimator Evaluation">
+<meta name="twitter:description" content="Runs experiments from the paper">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">sinusoidal-gradient-descent</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Estimator Evaluation</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Sinusoidal Frequency Estimation by Gradient Descent</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">core</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./evaluate_estimator.html" class="sidebar-item-text sidebar-link active">Estimator Evaluation</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./metrics.html" class="sidebar-item-text sidebar-link">Metrics</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sinusoidevaluationdataset" id="toc-sinusoidevaluationdataset" class="nav-link active" data-scroll-target="#sinusoidevaluationdataset">SinusoidEvaluationDataset</a></li>
+  <li><a href="#multisinusoidevaluationdataset" id="toc-multisinusoidevaluationdataset" class="nav-link" data-scroll-target="#multisinusoidevaluationdataset">MultiSinusoidEvaluationDataset</a></li>
+  <li><a href="#sample_initial_predictions" id="toc-sample_initial_predictions" class="nav-link" data-scroll-target="#sample_initial_predictions">sample_initial_predictions</a></li>
+  <li><a href="#evaluation_loop" id="toc-evaluation_loop" class="nav-link" data-scroll-target="#evaluation_loop">evaluation_loop</a></li>
+  <li><a href="#run" id="toc-run" class="nav-link" data-scroll-target="#run">run</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/ben-hayes/sinusoidal-gradient-descent/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Estimator Evaluation</h1>
+</div>
+
+<div>
+  <div class="description">
+    Runs experiments from the paper
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<hr>
+<p><a href="https://github.com/ben-hayes/sinusoidal-gradient-descent/blob/main/sinusoidal_gradient_descent/eval/estimator.py#L26" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="sinusoidevaluationdataset" class="level3">
+<h3 class="anchored" data-anchor-id="sinusoidevaluationdataset">SinusoidEvaluationDataset</h3>
+<blockquote class="blockquote">
+<pre><code> SinusoidEvaluationDataset (signal_length:int=4096,
+                            freq_range:Tuple[float]=(0.0, 0.5),
+                            amp_range:Tuple[float]=(0.0, 1.0),
+                            phase_range:Tuple[float]=(0.0,
+                            6.283185307179586),
+                            snr_range:Tuple[float]=(0.0, 30.0),
+                            n_freqs:int=100, n_amps:int=100,
+                            n_phases:int=100, n_snrs:int=7,
+                            evaluate_phase:bool=False,
+                            initial_phase:float=0.0)</code></pre>
+</blockquote>
+<p>Implements a synthetic dataset of sinusoids in white Gaussian noise for the single sinusoid evaluation task.</p>
+<hr>
+<p><a href="https://github.com/ben-hayes/sinusoidal-gradient-descent/blob/main/sinusoidal_gradient_descent/eval/estimator.py#L124" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="multisinusoidevaluationdataset" class="level3">
+<h3 class="anchored" data-anchor-id="multisinusoidevaluationdataset">MultiSinusoidEvaluationDataset</h3>
+<blockquote class="blockquote">
+<pre><code> MultiSinusoidEvaluationDataset (signal_length:int=4096,
+                                 n_components:int=4,
+                                 freq_range:Tuple[float]=(0.0, 0.5),
+                                 amp_range:Tuple[float]=(0.0, 1.0),
+                                 snr_range:Tuple[float]=(0.0, 30.0),
+                                 n_samples:int=100, n_snrs:int=7,
+                                 initial_phase:float=0.0,
+                                 dataset_seed:int=0,
+                                 enable_noise:bool=True)</code></pre>
+</blockquote>
+<p>Implements a synthetic dataset of sinusoidal mixtures for the multi-sinusoid estimation task.</p>
+<hr>
+<p><a href="https://github.com/ben-hayes/sinusoidal-gradient-descent/blob/main/sinusoidal_gradient_descent/eval/estimator.py#L198" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="sample_initial_predictions" class="level3">
+<h3 class="anchored" data-anchor-id="sample_initial_predictions">sample_initial_predictions</h3>
+<blockquote class="blockquote">
+<pre><code> sample_initial_predictions (n_sinusoids:int, freq_range:Tuple[float],
+                             amp_range:Tuple[float], initial_phase:float,
+                             invert_sigmoid:bool=False,
+                             batch_size:Optional[int]=None,
+                             all_random_in_batch:bool=False, seed:int=0,
+                             device:str='cpu', flatten:bool=False)</code></pre>
+</blockquote>
+<p>Samples initial parameters for sinusoidal frequency estimation</p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Type</strong></th>
+<th><strong>Default</strong></th>
+<th><strong>Details</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>n_sinusoids</td>
+<td>int</td>
+<td></td>
+<td>The number of sinusoidal components</td>
+</tr>
+<tr class="even">
+<td>freq_range</td>
+<td>typing.Tuple[float]</td>
+<td></td>
+<td>The range of possible frequencies</td>
+</tr>
+<tr class="odd">
+<td>amp_range</td>
+<td>typing.Tuple[float]</td>
+<td></td>
+<td>The range of possible amplitudes</td>
+</tr>
+<tr class="even">
+<td>initial_phase</td>
+<td>float</td>
+<td></td>
+<td>The initial phase of the sinusoids</td>
+</tr>
+<tr class="odd">
+<td>invert_sigmoid</td>
+<td>bool</td>
+<td>False</td>
+<td>Whether to invert the sigmoid function when sampling the amplitudes</td>
+</tr>
+<tr class="even">
+<td>batch_size</td>
+<td>typing.Optional[int]</td>
+<td>None</td>
+<td>The batch size of initial predictions</td>
+</tr>
+<tr class="odd">
+<td>all_random_in_batch</td>
+<td>bool</td>
+<td>False</td>
+<td>If true, all predictions in a batch will be sampled randomly. If false, one randomly sampled prediction will be repeated across the batch dimension.</td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>int</td>
+<td>0</td>
+<td>The random seed</td>
+</tr>
+<tr class="odd">
+<td>device</td>
+<td>str</td>
+<td>cpu</td>
+<td>The device to place the initial predictions on</td>
+</tr>
+<tr class="even">
+<td>flatten</td>
+<td>bool</td>
+<td>False</td>
+<td>Whether to flatten the initial predictions</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a href="https://github.com/ben-hayes/sinusoidal-gradient-descent/blob/main/sinusoidal_gradient_descent/eval/estimator.py#L253" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="evaluation_loop" class="level3">
+<h3 class="anchored" data-anchor-id="evaluation_loop">evaluation_loop</h3>
+<blockquote class="blockquote">
+<pre><code> evaluation_loop (dataloader:torch.utils.data.dataloader.DataLoader,
+                  loss_cfg:omegaconf.dictconfig.DictConfig,
+                  optimizer_cfg:omegaconf.dictconfig.DictConfig,
+                  amplitude_estimator_cfg:omegaconf.dictconfig.DictConfig,
+                  metric_fn_cfg:omegaconf.dictconfig.DictConfig,
+                  initial_params:Tuple[torch.Tensor],
+                  use_real_sinusoid_baseline:bool=False,
+                  use_global_amp:bool=True,
+                  saturate_global_amp:bool=False,
+                  normalise_complex_grads:bool=False, mode:str='multi',
+                  device:Union[torch.device,str]='cpu', n_steps:int=1000,
+                  log_interval:int=100, seed:int=0)</code></pre>
+</blockquote>
+<p>Runs the experimental evaluation</p>
+<hr>
+<p><a href="https://github.com/ben-hayes/sinusoidal-gradient-descent/blob/main/sinusoidal_gradient_descent/eval/estimator.py#L399" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="run" class="level3">
+<h3 class="anchored" data-anchor-id="run">run</h3>
+<blockquote class="blockquote">
+<pre><code> run (cfg:omegaconf.dictconfig.DictConfig)</code></pre>
+</blockquote>
+<p>Runs the estimator evaluation</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
